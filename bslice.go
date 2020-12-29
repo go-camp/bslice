@@ -1,21 +1,21 @@
 package bslice
 
-func batch1(size, batch int, f func(int, int) bool) {
-	i, j := 0, batch
-	for i < size {
-		if j > size || j < 0 {
-			f(i, size)
+func batch1(tsize, bsize int, f func(int, int) bool) {
+	i, j := 0, bsize
+	for i < tsize {
+		if j > tsize || j < 0 {
+			f(i, tsize)
 			break
 		}
 		if f(i, j) {
 			break
 		}
-		i, j = j, j+batch
+		i, j = j, j+bsize
 	}
 }
 
-func batch2(size, batch int, f func(int, int) bool) {
-	i, j := size, size+batch
+func batch2(tsize, bsize int, f func(int, int) bool) {
+	i, j := tsize, tsize+bsize
 	for i > 0 {
 		if j <= 0 {
 			f(0, i)
@@ -24,22 +24,22 @@ func batch2(size, batch int, f func(int, int) bool) {
 		if f(j, i) {
 			break
 		}
-		i, j = j, j+batch
+		i, j = j, j+bsize
 	}
 }
 
-// Batch loop over slice in batches.
+// Batch loops through the target slice in batches and calls the function in each batch.
+// tsize is length of target slice.
+// bsize is length of slice in each batch.
+// If bsize is negative number, iterate from end to beginning of target slice.
 // If f return true, loop will break.
-// - size is length of slice.
-// - batch is length of slice each iteration.
-//   If batch is negative number, iterate from end to beginning of slice.
-func Batch(size, batch int, f func(int, int) bool) {
-	if batch == 0 {
-		batch = size
+func Batch(tsize, bsize int, f func(int, int) bool) {
+	if bsize == 0 {
+		bsize = tsize
 	}
-	if batch > 0 {
-		batch1(size, batch, f)
+	if bsize > 0 {
+		batch1(tsize, bsize, f)
 	} else {
-		batch2(size, batch, f)
+		batch2(tsize, bsize, f)
 	}
 }

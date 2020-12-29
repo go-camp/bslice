@@ -10,15 +10,15 @@ import (
 func TestBatch(t *testing.T) {
 	var arr1 = []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 	var arr3 []int
-	for batch := -20; batch < 20; batch++ {
+	for bsize := -20; bsize < 20; bsize++ {
 		arr3 = arr3[:0]
-		Batch(len(arr1), batch, func(i, j int) bool {
+		Batch(len(arr1), bsize, func(i, j int) bool {
 			arr3 = append(arr3, arr1[i:j]...)
 			return false
 		})
 		sort.Ints(arr3)
 		if !reflect.DeepEqual(arr1, arr3) {
-			t.Errorf("Batch(%d, %d, f) want %v but get %v", len(arr1), batch, arr1, arr3)
+			t.Errorf("Batch(%d, %d, f) want %v but get %v", len(arr1), bsize, arr1, arr3)
 		}
 	}
 }
